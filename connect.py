@@ -16,13 +16,12 @@ def connect():
         # create a cursor
         cur = conn.cursor()
         
-	# execute a statement
-        print('PostgreSQL database version:')
-        cur.execute('SELECT version()')
+    # create a query to specify which values we want from the database.
+        query = "SELECT * FROM clients"
 
-        # display the PostgreSQL database server version
-        db_version = cur.fetchone()
-        print(db_version)
+        outputquery = "COPY ({0}) TO STDOUT WITH CSV HEADER".format(query)
+        with open('clients.csv', 'w') as f:
+            cur.copy_expert(outputquery, f)
        
 	# close the communication with the PostgreSQL
         cur.close()
